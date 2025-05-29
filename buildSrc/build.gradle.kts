@@ -58,3 +58,7 @@ dependencies {
     implementation("com.android.tools.build:gradle:${Versions.Android.buildTools}")
     implementation(kotlin("script-runtime"))
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(Versions.kotlinJvmTarget))
+}

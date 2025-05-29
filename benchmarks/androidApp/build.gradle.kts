@@ -14,9 +14,8 @@ android {
         targetCompatibility = Versions.targetCompatibilityVersion
     }
 
-    kotlinOptions {
-        jvmTarget = Versions.kotlinJvmTarget
-    }
+    // kotlinOptions.jvmTarget is deprecated, configured via tasks.withType
+    // jvmTarget = Versions.kotlinJvmTarget
 
     defaultConfig {
         // Use minSdk = 32 because minSdk = 33 is throwing build time warnings saying it isn't supported,
@@ -44,6 +43,10 @@ android {
             isDefault = true
         }
     }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(Versions.kotlinJvmTarget))
 }
 
 dependencies {

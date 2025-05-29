@@ -28,10 +28,13 @@ allprojects {
     version = Realm.version
     group = Realm.group
 
-    // Define JVM bytecode target for all Kotlin targets
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile> {
+    // Define JVM bytecode target for all Kotlin targets and add -Wextra
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
-            jvmTarget.set(JvmTarget.fromTarget(Versions.kotlinJvmTarget))
+            if (this is org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions) {
+                jvmTarget.set(JvmTarget.fromTarget(Versions.kotlinJvmTarget))
+            }
+            freeCompilerArgs.add("-Wextra")
         }
     }
 }

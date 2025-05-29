@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose") version "1.2.0-alpha01-dev774"
-    application
+    // application plugin removed
 }
 
 repositories {
@@ -18,9 +18,14 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = Versions.kotlinJvmTarget
+    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(Versions.kotlinJvmTarget))
 }
 
-application {
-    mainClass.set("MainKt")
+kotlin {
+    jvm {
+        @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
+        binaries.executable {
+            mainClass.set("MainKt")
+        }
+    }
 }
