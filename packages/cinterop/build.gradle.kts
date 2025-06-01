@@ -20,8 +20,8 @@ import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
     id("com.android.library")
+    id("org.jetbrains.kotlin.multiplatform")
     id("realm-publisher")
 }
 
@@ -150,9 +150,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            compilerOptions.freeCompilerArgs.addAll(when (buildType) {
-                BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorX86Debug
-                BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorX86Release
+            compilerOptions {
+                freeCompilerArgs.addAll(when (buildType) {
+                    BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorX86Debug
+                    BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorX86Release
+                })
             }
         }
     }
@@ -163,9 +165,11 @@ kotlin {
                 packageName = "realm_wrapper"
                 includeDirs("$absoluteCorePath/src/")
             }
-            compilerOptions.freeCompilerArgs.addAll(when (buildType) {
-                BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorArm64Debug
-                BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorArm64Release
+            compilerOptions {
+                freeCompilerArgs.addAll(when (buildType) {
+                    BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorArm64Debug
+                    BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorArm64Release
+                })
             }
         }
     }
@@ -183,9 +187,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            compilerOptions.freeCompilerArgs.addAll(when (buildType) {
-                BuildType.DEBUG -> nativeLibraryIncludesIosArm64Debug
-                BuildType.RELEASE -> nativeLibraryIncludesIosArm64Release
+            compilerOptions {
+                freeCompilerArgs.addAll(when (buildType) {
+                    BuildType.DEBUG -> nativeLibraryIncludesIosArm64Debug
+                    BuildType.RELEASE -> nativeLibraryIncludesIosArm64Release
+                })
             }
         }
     }
@@ -203,9 +209,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            compilerOptions.freeCompilerArgs.addAll(when(buildType) {
-                BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
-                BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
+            compilerOptions {
+                freeCompilerArgs.addAll(when(buildType) {
+                    BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
+                    BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
+                })
             }
         }
     }
@@ -216,9 +224,11 @@ kotlin {
                 packageName = "realm_wrapper"
                 includeDirs("$absoluteCorePath/src/")
             }
-            compilerOptions.freeCompilerArgs.addAll(when(buildType) {
-                BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
-                BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
+            compilerOptions {
+                freeCompilerArgs.addAll(when(buildType) {
+                    BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
+                    BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
+                })
             }
         }
     }
@@ -445,7 +455,7 @@ val copyJVMSharedLibs: TaskProvider<Task> by tasks.registering {
         val archs = (project.property("realm.kotlin.copyNativeJvmLibs") as String)
             .split(",")
             .map { it.trim() }
-            .map { it.lowercase() }
+            .map { it.toLowerCase() }
 
         archs.forEach { arch ->
             when(arch) {
@@ -704,17 +714,17 @@ fun Task.build_C_API_iOS_Arm64(buildType: BuildType) {
     outputs.file(project.file("$directory/lib/librealm-sync${buildType.buildDirSuffix}.a"))
 }
 
-afterEvaluate {
-    // Ensure that Swig wrapper is generated before compiling the JNI layer. This task needs
-    // the cpp file as it somehow processes the CMakeList.txt-file, but haven't dug up the
-    // actuals
-    tasks.named("generateJsonModelDebug") {
-        inputs.files(tasks.getByPath(":jni-swig-stub:realmWrapperJvm").outputs)
-    }
-    tasks.named("generateJsonModelRelease") {
-        inputs.files(tasks.getByPath(":jni-swig-stub:realmWrapperJvm").outputs)
-    }
-}
+//afterEvaluate {
+//    // Ensure that Swig wrapper is generated before compiling the JNI layer. This task needs
+//    // the cpp file as it somehow processes the CMakeList.txt-file, but haven't dug up the
+//    // actuals
+//    tasks.named("generateJsonModelDebug") {
+//        inputs.files(tasks.getByPath(":jni-swig-stub:realmWrapperJvm").outputs)
+//    }
+//    tasks.named("generateJsonModelRelease") {
+//        inputs.files(tasks.getByPath(":jni-swig-stub:realmWrapperJvm").outputs)
+//    }
+//}
 
 tasks.named("jvmMainClasses") {
     checkIfBuildingNativeLibs(this) {

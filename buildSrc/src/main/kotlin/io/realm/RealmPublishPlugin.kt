@@ -97,6 +97,22 @@ class RealmPublishPlugin : Plugin<Project> {
         } else {
             configureSubProject(project, signBuild)
             configureTestRepository(project)
+            configureGitHubPackagesRepository(project)
+        }
+    }
+
+    private fun configureGitHubPackagesRepository(project: Project) {
+        project.extensions.getByType<PublishingExtension>().apply {
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = project.uri("https://maven.pkg.github.com/realm/realm-kotlin")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = System.getenv("GITHUB_TOKEN")
+                    }
+                }
+            }
         }
     }
 

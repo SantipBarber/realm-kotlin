@@ -169,6 +169,12 @@ tasks.register("publishCIPackages") {
     }
 }
 
+tasks.register("publishToGithubPackages") {
+    group = "Publishing"
+    description = "Publishes all publications to GitHub Packages."
+    dependsOn("publish")
+}
+
 tasks.register("uploadDokka") {
     dependsOn("dokkaHtmlMultiModule")
     group = "Release"
