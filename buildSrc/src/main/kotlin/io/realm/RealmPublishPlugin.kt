@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.realm.kotlin
+package io.realm
 
 import Realm
 import io.github.gradlenexus.publishplugin.NexusPublishExtension
@@ -106,7 +106,7 @@ class RealmPublishPlugin : Plugin<Project> {
             repositories {
                 maven {
                     name = "GitHubPackages"
-                    url = project.uri("https://maven.pkg.github.com/realm/realm-kotlin")
+                    url = project.uri("https://maven.pkg.github.com/santipbarber/realm-kotlin")
                     credentials {
                         username = System.getenv("GITHUB_ACTOR")
                         password = System.getenv("GITHUB_TOKEN")
@@ -159,7 +159,7 @@ class RealmPublishPlugin : Plugin<Project> {
             // The nexus publisher plugin can only be applied to top-level projects.
             // See https://github.com/gradle-nexus/publish-plugin/issues/81
             extensions.getByType<NexusPublishExtension>().apply {
-                this.packageGroup.set("io.realm.kotlin")
+                this.packageGroup.set("com.santipbarber.realm-kotlin")
                 this.repositories {
                     sonatype {
                         this.stagingProfileId.set(sonatypeStagingProfileId)

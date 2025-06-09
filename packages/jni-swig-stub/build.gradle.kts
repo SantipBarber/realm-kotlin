@@ -22,7 +22,7 @@ plugins {
 
 val mavenPublicationName = "jniSwigStubs"
 
-val generatedSourceRoot = "$buildDir/generated/sources"
+val generatedSourceRoot = "${layout.buildDirectory.get()}/generated/sources"
 
 java {
     withSourcesJar()

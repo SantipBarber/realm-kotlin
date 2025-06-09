@@ -39,7 +39,7 @@ project.extensions.configure(kotlinx.atomicfu.plugin.gradle.AtomicFUPluginExtens
 }
 
 // Directory for generated Version.kt holding VERSION constant
-val versionDirectory = "$buildDir/generated/source/version/"
+val versionDirectory = "${layout.buildDirectory.get()}/generated/source/version/"
 
 // Types of builds supported
 enum class BuildType(val type: String, val buildDirSuffix: String) {
@@ -461,19 +461,19 @@ val copyJVMSharedLibs: TaskProvider<Task> by tasks.registering {
             when(arch) {
                 "linux" -> {
                     // copy Linux pre-built binaries
-                    project.file("$buildDir/realmLinuxBuild/librealmc.so")
+                    project.file("${layout.buildDirectory.get()}/realmLinuxBuild/librealmc.so")
                         .copyTo(project.file("$jvmJniPath/linux/librealmc.so"), overwrite = true)
                     outputs.file(project.file("$jvmJniPath/linux/librealmc.so"))
                 }
                 "macos" -> {
                     // copy MacOS pre-built binaries
-                    project.file("$buildDir/realmMacOsBuild/librealmc.dylib")
+                    project.file("${layout.buildDirectory.get()}/realmMacOsBuild/librealmc.dylib")
                         .copyTo(project.file("$jvmJniPath/macos/librealmc.dylib"), overwrite = true)
                     outputs.file(project.file("$jvmJniPath/macos/librealmc.dylib"))
                 }
                 "windows" -> {
                     // copy Window pre-built binaries
-                    project.file("$buildDir/realmWindowsBuild/Release/realmc.dll")
+                    project.file("${layout.buildDirectory.get()}/realmWindowsBuild/Release/realmc.dll")
                         .copyTo(project.file("$jvmJniPath/windows/realmc.dll"), overwrite = true)
                     outputs.file(project.file("$jvmJniPath/windows/realmc.dll"))
                 }
@@ -516,7 +516,7 @@ fun getSharedCMakeFlags(buildType: BuildType, ccache: Boolean = true): Array<Str
 fun Task.buildSharedLibrariesForJVMMacOs() {
     group = "Build"
     description = "Compile dynamic libraries loaded by the JVM fat jar for supported platforms."
-    val directory = "$buildDir/realmMacOsBuild"
+    val directory = "${layout.buildDirectory.get()}/realmMacOsBuild"
 
     doLast {
         exec {
@@ -553,7 +553,7 @@ fun Task.buildSharedLibrariesForJVMMacOs() {
 fun Task.buildSharedLibrariesForJVMWindows() {
     group = "Build"
     description = "Compile dynamic libraries loaded by the JVM fat jar for supported platforms."
-    val directory = "$buildDir/realmWindowsBuild"
+    val directory = "${layout.buildDirectory.get()}/realmWindowsBuild"
 
     doLast {
         file(directory).mkdirs()

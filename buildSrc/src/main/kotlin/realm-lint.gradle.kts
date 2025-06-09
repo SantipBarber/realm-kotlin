@@ -50,7 +50,7 @@ allprojects {
         }
     }
 
-    val outputDir = "${project.buildDir}/reports/ktlint/"
+    val outputDir = "${project.layout.buildDirectory.get()}/reports/ktlint/"
     val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
 
     val ktlintCheck by tasks.creating(JavaExec::class) {
@@ -66,8 +66,8 @@ allprojects {
             "!src/**/generated/**",
             "!src/**/resources/**",
             "--reporter=plain",
-            "--reporter=html,output=${project.buildDir}/reports/ktlint/ktlint.html",
-            "--reporter=checkstyle,output=${project.buildDir}/reports/ktlint/ktlint.xml",
+            "--reporter=html,output=${project.layout.buildDirectory.get()}/reports/ktlint/ktlint.html",
+            "--reporter=checkstyle,output=${project.layout.buildDirectory.get()}/reports/ktlint/ktlint.xml",
             "--editorconfig=${configDir}/ktlint/.editorconfig"
         )
     }

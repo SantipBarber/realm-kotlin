@@ -62,10 +62,10 @@ val HOST_OS: OperatingSystem = findHostOs()
 
 object Realm {
     val ciBuild = (System.getenv("CI") != null)
-    const val version = "3.0.0-SNAPSHOT"
-    const val group = "io.realm.kotlin"
-    const val projectUrl = "https://realm.io"
-    const val pluginPortalId = "io.realm.kotlin"
+    const val version = "2.1.0"
+    const val group = "com.santipbarber.realm-kotlin"
+    const val projectUrl = "https://github.com/santipbarber/realm-kotlin"
+    const val pluginPortalId = "com.santipbarber.realm-kotlin"
     // Modules has to match ${project.group}:${project.name} to make composite build work
     const val compilerPluginId = "plugin-compiler"
     const val compilerPluginIdNative = "plugin-compiler-shaded"
@@ -80,18 +80,18 @@ object Realm {
     }
     object IssueManagement {
         const val system = "Github"
-        const val url = "https://github.com/realm/realm-kotlin/issues"
+        const val url = "https://github.com/santipbarber/realm-kotlin/issues"
     }
     object SCM {
-        const val connection = "scm:git:git://github.com/realm/realm-kotlin.git"
-        const val developerConnection = "scm:git:ssh://github.com/realm/realm-kotlin.git"
-        const val url = "https://github.com/realm/realm-kotlin"
+        const val connection = "scm:git:git://github.com/santipbarber/realm-kotlin.git"
+        const val developerConnection = "scm:git:ssh://github.com/santipbarber/realm-kotlin.git"
+        const val url = "https://github.com/santipbarber/realm-kotlin"
     }
     object Developer {
-        const val name = "Realm"
-        const val email = "info@realm.io"
-        const val organization = "MongoDB"
-        const val organizationUrl = "https://www.mongodb.com"
+        const val name = "Santi P. Barber"
+        const val email = "santipbr@gmail.com"
+        const val organization = "Santi P. Barber"
+        const val organizationUrl = "https://github.com/santipbarber"
     }
 }
 

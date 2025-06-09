@@ -93,7 +93,7 @@ java {
 }
 
 // Make version information available at runtime
-val versionDirectory = "$buildDir/generated/source/version/"
+val versionDirectory = "${layout.buildDirectory.get()}/generated/source/version/"
 sourceSets {
     main {
         java.srcDir(versionDirectory)
