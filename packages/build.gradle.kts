@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import io.realm.kotlin.getPropertyValue
 
 plugins {
     id("com.android.library") apply false
@@ -100,66 +101,66 @@ tasks.register("publishCIPackages") {
         when(target) {
             "iosArm64" -> {
                 dependsOn(
-                    ":cinterop:publishIosArm64PublicationToTestRepository",
-                    ":cinterop:publishIosSimulatorArm64PublicationToTestRepository",
-                    ":library-base:publishIosArm64PublicationToTestRepository",
-                    ":library-base:publishIosSimulatorArm64PublicationToTestRepository",
-                    ":library-sync:publishIosArm64PublicationToTestRepository",
-                    ":library-sync:publishIosSimulatorArm64PublicationToTestRepository",
+                    ":packages:cinterop:publishIosArm64PublicationToTestRepository",
+                    ":packages:cinterop:publishIosSimulatorArm64PublicationToTestRepository",
+                    ":packages:library-base:publishIosArm64PublicationToTestRepository",
+                    ":packages:library-base:publishIosSimulatorArm64PublicationToTestRepository",
+                    ":packages:library-sync:publishIosArm64PublicationToTestRepository",
+                    ":packages:library-sync:publishIosSimulatorArm64PublicationToTestRepository",
                 )
             }
             "iosX64" -> {
                 dependsOn(
-                    ":cinterop:publishIosX64PublicationToTestRepository",
-                    ":library-base:publishIosX64PublicationToTestRepository",
-                    ":library-sync:publishIosX64PublicationToTestRepository",
+                    ":packages:cinterop:publishIosX64PublicationToTestRepository",
+                    ":packages:library-base:publishIosX64PublicationToTestRepository",
+                    ":packages:library-sync:publishIosX64PublicationToTestRepository",
                 )
             }
             "jvm" -> {
                 dependsOn(
-                    ":jni-swig-stub:publishAllPublicationsToTestRepository",
-                    ":cinterop:publishJvmPublicationToTestRepository",
-                    ":library-base:publishJvmPublicationToTestRepository",
-                    ":library-sync:publishJvmPublicationToTestRepository",
+                    ":packages:jni-swig-stub:publishAllPublicationsToTestRepository",
+                    ":packages:cinterop:publishJvmPublicationToTestRepository",
+                    ":packages:library-base:publishJvmPublicationToTestRepository",
+                    ":packages:library-sync:publishJvmPublicationToTestRepository",
                 )
             }
             "macosX64" -> {
                 dependsOn(
-                    ":cinterop:publishMacosX64PublicationToTestRepository",
-                    ":library-base:publishMacosX64PublicationToTestRepository",
-                    ":library-sync:publishMacosX64PublicationToTestRepository",
+                    ":packages:cinterop:publishMacosX64PublicationToTestRepository",
+                    ":packages:library-base:publishMacosX64PublicationToTestRepository",
+                    ":packages:library-sync:publishMacosX64PublicationToTestRepository",
                 )
             }
             "macosArm64" -> {
                 dependsOn(
-                    ":cinterop:publishMacosArm64PublicationToTestRepository",
-                    ":library-base:publishMacosArm64PublicationToTestRepository",
-                    ":library-sync:publishMacosArm64PublicationToTestRepository",
+                    ":packages:cinterop:publishMacosArm64PublicationToTestRepository",
+                    ":packages:library-base:publishMacosArm64PublicationToTestRepository",
+                    ":packages:library-sync:publishMacosArm64PublicationToTestRepository",
                 )
             }
             "android" -> {
                 dependsOn(
-                    ":jni-swig-stub:publishAllPublicationsToTestRepository",
-                    ":cinterop:publishAndroidReleasePublicationToTestRepository",
-                    ":library-base:publishAndroidReleasePublicationToTestRepository",
-                    ":library-sync:publishAndroidReleasePublicationToTestRepository",
+                    ":packages:jni-swig-stub:publishAllPublicationsToTestRepository",
+                    ":packages:cinterop:publishAndroidReleasePublicationToTestRepository",
+                    ":packages:library-base:publishAndroidReleasePublicationToTestRepository",
+                    ":packages:library-sync:publishAndroidReleasePublicationToTestRepository",
                 )
             }
             "metadata" -> {
                 dependsOn(
-                    ":cinterop:publishKotlinMultiplatformPublicationToTestRepository",
-                    ":library-base:publishKotlinMultiplatformPublicationToTestRepository",
-                    ":library-sync:publishKotlinMultiplatformPublicationToTestRepository",
+                    ":packages:cinterop:publishKotlinMultiplatformPublicationToTestRepository",
+                    ":packages:library-base:publishKotlinMultiplatformPublicationToTestRepository",
+                    ":packages:library-sync:publishKotlinMultiplatformPublicationToTestRepository",
                 )
             }
             "compilerPlugin" -> {
                 dependsOn(
-                    ":plugin-compiler:publishAllPublicationsToTestRepository",
-                    ":plugin-compiler-shaded:publishAllPublicationsToTestRepository"
+                    ":packages:plugin-compiler:publishAllPublicationsToTestRepository",
+                    ":packages:plugin-compiler-shaded:publishAllPublicationsToTestRepository"
                 )
             }
             "gradlePlugin" -> {
-                dependsOn(":gradle-plugin:publishAllPublicationsToTestRepository")
+                dependsOn(":packages:gradle-plugin:publishAllPublicationsToTestRepository")
             }
             else -> {
                 throw IllegalArgumentException("Unsupported target: $target")
@@ -170,8 +171,8 @@ tasks.register("publishCIPackages") {
 
 tasks.register("publishToGithubPackages") {
     group = "Publishing"
-    description = "Publishes all publications to GitHub Packages."
-    dependsOn("publish")
+    description = "Publishes simplified KMP libraries for iOS and Android to GitHub Packages."
+    dependsOn(":packages:publish")
 }
 
 tasks.register("uploadDokka") {

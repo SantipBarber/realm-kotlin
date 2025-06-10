@@ -18,12 +18,13 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     `java`
+    `maven-publish`
     id("com.github.johnrengelman.shadow") version Versions.shadowJar
     id("realm-publisher")
 }
 
 dependencies {
-    implementation(project(":plugin-compiler"))
+    implementation(project(":packages:plugin-compiler"))
 }
 
 val mavenPublicationName = "compilerPluginShaded"

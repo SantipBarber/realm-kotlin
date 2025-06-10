@@ -87,6 +87,8 @@ allprojects {
         )
     }
 
+    // Detekt configuration temporarily disabled due to version compatibility issues
+    /*
     detekt {
         buildUponDefaultConfig = true // preconfigure defaults
         config.from(files("$configDir/detekt/detekt.yml")) // point to your custom config defining rules to run, overwriting default behavior
@@ -121,4 +123,5 @@ allprojects {
             }
         }
     }
+    */
 }

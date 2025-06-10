@@ -22,16 +22,15 @@ import java.nio.charset.Charset
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
+    id("maven-publish")
     id("realm-publisher")
+    id("org.jetbrains.kotlinx.atomicfu") version Versions.atomicfu
 }
 
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:${Versions.atomicfu}")
-    }
+repositories {
+    google()
+    mavenCentral()
 }
-
-apply(plugin = "kotlinx-atomicfu")
 // AtomicFu cannot transform JVM code. Throws
 // ClassCastException: org.objectweb.asm.tree.InsnList cannot be cast to java.lang.Iterable
 project.extensions.configure(kotlinx.atomicfu.plugin.gradle.AtomicFUPluginExtension::class) {
@@ -150,11 +149,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            compilerOptions {
-                freeCompilerArgs.addAll(when (buildType) {
+            kotlinOptions {
+                freeCompilerArgs += when (buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorX86Debug
                     BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorX86Release
-                })
+                }
             }
         }
     }
@@ -165,11 +164,11 @@ kotlin {
                 packageName = "realm_wrapper"
                 includeDirs("$absoluteCorePath/src/")
             }
-            compilerOptions {
-                freeCompilerArgs.addAll(when (buildType) {
+            kotlinOptions {
+                freeCompilerArgs += when (buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorArm64Debug
                     BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorArm64Release
-                })
+                }
             }
         }
     }
@@ -187,11 +186,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            compilerOptions {
-                freeCompilerArgs.addAll(when (buildType) {
+            kotlinOptions {
+                freeCompilerArgs += when (buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesIosArm64Debug
                     BuildType.RELEASE -> nativeLibraryIncludesIosArm64Release
-                })
+                }
             }
         }
     }
@@ -209,11 +208,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            compilerOptions {
-                freeCompilerArgs.addAll(when(buildType) {
+            kotlinOptions {
+                freeCompilerArgs += when(buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
                     BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
-                })
+                }
             }
         }
     }
@@ -224,11 +223,11 @@ kotlin {
                 packageName = "realm_wrapper"
                 includeDirs("$absoluteCorePath/src/")
             }
-            compilerOptions {
-                freeCompilerArgs.addAll(when(buildType) {
+            kotlinOptions {
+                freeCompilerArgs += when(buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
                     BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
-                })
+                }
             }
         }
     }
@@ -246,7 +245,7 @@ kotlin {
         val jvm by creating {
             dependsOn(commonMain)
             dependencies {
-                api(project(":jni-swig-stub"))
+                // api(project("::jni-swig-stub"))
             }
         }
         val jvmMain by getting {
@@ -455,7 +454,7 @@ val copyJVMSharedLibs: TaskProvider<Task> by tasks.registering {
         val archs = (project.property("realm.kotlin.copyNativeJvmLibs") as String)
             .split(",")
             .map { it.trim() }
-            .map { it.toLowerCase() }
+            .map { it }
 
         archs.forEach { arch ->
             when(arch) {
@@ -757,15 +756,15 @@ val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
 }
 
-publishing {
+/*publishing {
     // See https://dev.to/kotlin/how-to-build-and-publish-a-kotlin-multiplatform-library-going-public-4a8k
     publications.withType<MavenPublication> {
         // Stub javadoc.jar artifact
         artifact(javadocJar.get())
     }
-}
+}*/
 
-realmPublish {
+/*realmPublish {
     pom {
         name = "C Interop"
         description =
@@ -773,7 +772,7 @@ realmPublish {
             "supposed to be consumed directly, but through " +
             "'io.realm.kotlin:gradle-plugin:${Realm.version}' instead."
     }
-}
+}*/
 
 // Generate code with version constant
 val generateSdkVersionConstant: Task = tasks.create("generateSdkVersionConstant") {

@@ -17,3 +17,14 @@
 
 rootProject.name = "realm-kotlin-root"
 
+include(":packages")
+include(":packages:gradle-plugin")
+include(":packages:library-base")
+include(":packages:library-sync")
+include(":packages:cinterop")
+include(":packages:plugin-compiler")
+include(":packages:plugin-compiler-shaded")
+include(":packages:jni-swig-stub")
+include(":packages:test-base")
+include(":packages:test-sync")
+

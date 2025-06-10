@@ -43,10 +43,10 @@ dependencies {
 configurations.all {
     resolutionStrategy.dependencySubstitution {
         rootProject.allprojects
-            .filter { it != project && it != rootProject }
+            .filter { it != project && it != rootProject && it.path.startsWith(":packages:") }
             .forEach { subproject: Project ->
                 substitute(module("io.realm.kotlin:${subproject.name}:${Realm.version}")).using(
-                    project(":${subproject.name}")
+                    project(subproject.path)
                 )
             }
     }

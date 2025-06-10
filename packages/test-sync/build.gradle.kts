@@ -44,10 +44,10 @@ dependencies {
 configurations.all {
     resolutionStrategy.dependencySubstitution {
         rootProject.allprojects
-            .filter { it != project && it != rootProject }
+            .filter { it != project && it != rootProject && it.path.startsWith(":packages:") }
             .forEach { subproject: Project ->
                 substitute(module("io.realm.kotlin:${subproject.name}:${Realm.version}")).using(
-                    project(":${subproject.name}")
+                    project(subproject.path)
                 )
             }
     }
@@ -82,7 +82,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
                 // FIXME AUTO-SETUP Removed automatic dependency injection to ensure observability of
                 //  requirements for now
-                implementation(project(":test-base"))
+                implementation(project(":packages:test-base"))
                 // IDE Doesn't resolve library-base symbols if not adding it as an explicit
                 // dependency. Probably due to our own custom dependency substitution above, but
                 // shouldn't be an issue as it is already a transitive dependency of library-sync.
