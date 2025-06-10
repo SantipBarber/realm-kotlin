@@ -15,23 +15,20 @@
  * limitations under the License.
  */
 
-package io.realm
+package io.realm.kotlin
 
 import Realm
 import io.github.gradlenexus.publishplugin.NexusPublishExtension
-import io.github.gradlenexus.publishplugin.NexusPublishPlugin
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
-import org.gradle.plugins.signing.SigningPlugin
 import java.io.File
 import java.time.Duration
 
@@ -127,8 +124,8 @@ class RealmPublishPlugin : Plugin<Project> {
         val password: String = getPropertyValue(project, "signPasswordKotlin")
 
         with(project) {
-            plugins.apply(SigningPlugin::class.java)
-            plugins.apply(MavenPublishPlugin::class.java)
+            plugins.apply("signing")
+            plugins.apply("maven-publish")
 
             // Create the RealmPublish plugin. It must evaluate after all other plugins as it modifies their output.
             // Only allow configuration from sub projects as the top-level project is just a placeholder
@@ -153,7 +150,7 @@ class RealmPublishPlugin : Plugin<Project> {
         val sonatypeStagingProfileId = "78c19333e4450f"
 
         with(project) {
-            project.plugins.apply(NexusPublishPlugin::class.java)
+            project.plugins.apply("io.github.gradle-nexus.publish-plugin")
 
             // Configure upload to Maven Central.
             // The nexus publisher plugin can only be applied to top-level projects.

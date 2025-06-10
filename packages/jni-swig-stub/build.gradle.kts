@@ -17,6 +17,7 @@ import org.gradle.api.tasks.compile.JavaCompile
 
 plugins {
     id("java-library")
+    id("maven-publish")
     id("realm-publisher")
 }
 

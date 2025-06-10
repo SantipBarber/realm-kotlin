@@ -22,16 +22,16 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("com.android.library")
     id("realm-publisher")
+    `maven-publish`
     id("org.jetbrains.dokka")
     kotlin("plugin.serialization") version Versions.kotlin
+    id("org.jetbrains.kotlinx.atomicfu") version Versions.atomicfu
+}
+repositories {
+    google()
+    mavenCentral()
 }
 
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:${Versions.atomicfu}")
-    }
-}
-apply(plugin = "kotlinx-atomicfu")
 // AtomicFu cannot transform JVM code. Maybe an issue with using IR backend. Throws
 // ClassCastException: org.objectweb.asm.tree.InsnList cannot be cast to java.lang.Iterable
 project.extensions.configure(kotlinx.atomicfu.plugin.gradle.AtomicFUPluginExtension::class) {
@@ -41,17 +41,12 @@ project.extensions.configure(kotlinx.atomicfu.plugin.gradle.AtomicFUPluginExtens
 // Common Kotlin configuration
 @Suppress("UNUSED_VARIABLE")
 kotlin {
-    jvm()
     androidTarget {
-        // Changing this will also requires an update to the publishCIPackages task
-        // in /packages/build.gradle.kts
         publishLibraryVariants("release")
     }
     iosX64()
     iosSimulatorArm64()
     iosArm64()
-    macosX64()
-    macosArm64()
 
     sourceSets {
         val commonMain by getting {
@@ -61,10 +56,9 @@ kotlin {
                 // If runtimeapi is merged with cinterop then we will be exposing both to the users
                 // Runtime holds annotations, etc. that has to be exposed to users
                 // Cinterop does not hold anything required by users
+                // Temporarily removed cinterop dependency for simplified publishing
+                // api(project(":packages:cinterop"))
 
-                // NOTE: scope needs to be API since 'implementation' will produce a POM with 'runtime' scope
-                //       causing the compiler plugin to fail to lookup classes from the 'cinterop' package
-                api(project(":cinterop"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
                 implementation("org.jetbrains.kotlinx:atomicfu:${Versions.atomicfu}")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.serialization}")
@@ -77,32 +71,13 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        val jvm by creating {
-            dependsOn(commonMain)
-        }
-        val jvmMain by getting {
-            dependsOn(jvm)
-        }
         val androidMain by getting {
-            dependsOn(jvm)
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
             }
         }
-        val nativeDarwin by creating {
-            dependsOn(commonMain)
-        }
-        val nativeMacos by creating {
-            dependsOn(nativeDarwin)
-        }
         val nativeIos by creating {
-            dependsOn(nativeDarwin)
-        }
-        val macosX64Main by getting {
-            dependsOn(nativeMacos)
-        }
-        val macosArm64Main by getting {
-            dependsOn(nativeMacos)
+            dependsOn(commonMain)
         }
         val iosArm64Main by getting {
             dependsOn(nativeIos)
@@ -186,14 +161,14 @@ android {
     }
 }
 
-realmPublish {
-    pom {
-        name = "Library"
-        description = "Library code for Realm Kotlin. This artifact is not " +
-            "supposed to be consumed directly, but through " +
-            "'io.realm.kotlin:gradle-plugin:${Realm.version}' instead."
-    }
-}
+// realmPublish {
+//     pom {
+//         name = "Library"
+//         description = "Library code for Realm Kotlin. This artifact is not " +
+//             "supposed to be consumed directly, but through " +
+//             "'io.realm.kotlin:gradle-plugin:${Realm.version}' instead."
+//     }
+// }
 
 tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
     moduleName.set("Realm Kotlin SDK")
@@ -243,10 +218,50 @@ publishing {
     publications.withType<MavenPublication> {
         // Stub javadoc.jar artifact
         artifact(javadocJar.get())
+        
+        // Configure POM
+        pom {
+            name.set("Realm Kotlin Library Base")
+            description.set("Library code for Realm Kotlin. This artifact is not " +
+                "supposed to be consumed directly, but through " +
+                "'com.santipbarber.realm-kotlin:gradle-plugin:${Realm.version}' instead.")
+            url.set("https://github.com/santipbarber/realm-kotlin")
+            
+            licenses {
+                license {
+                    name.set("The Apache License, Version 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                }
+            }
+            
+            developers {
+                developer {
+                    name.set("Santi P. Barber")
+                    email.set("santipbr@gmail.com")
+                }
+            }
+            
+            scm {
+                connection.set("scm:git:git://github.com/santipbarber/realm-kotlin.git")
+                developerConnection.set("scm:git:ssh://github.com/santipbarber/realm-kotlin.git")
+                url.set("https://github.com/santipbarber/realm-kotlin")
+            }
+        }
     }
 
     val common = publications.getByName("kotlinMultiplatform") as MavenPublication
     // Configuration through examples/kmm-sample does not work if we do not resolve the tasks
     // completely, hence the .get() below.
     common.artifact(tasks.named("dokkaJar").get())
+    
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/santipbarber/realm-kotlin")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
