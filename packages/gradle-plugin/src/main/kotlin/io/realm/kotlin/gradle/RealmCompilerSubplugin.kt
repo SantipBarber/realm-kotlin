@@ -132,7 +132,7 @@ class RealmCompilerSubplugin : KotlinCompilerPluginSupportPlugin, AnalyticsError
             // in `afterEvaluate`. This means we can only see dependencies directly set,
             // and not their transitive dependencies. This should be fine as we only
             // want to track builds directly using Realm.
-            var usesSync: Boolean = withDefaultOnError("Uses Sync", false) {
+            val usesSync: Boolean = withDefaultOnError("Uses Sync", false) {
                 var usesSync = false
                 outer@
                 for (conf in target.configurations) {

@@ -53,13 +53,13 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(":packages:library-base"))
+                api(project(":library-base"))
                 implementation(kotlin("stdlib-common"))
                 implementation(kotlin("reflect"))
                 // If runtimeapi is merged with cinterop then we will be exposing both to the users
                 // Runtime holds annotations, etc. that has to be exposed to users
                 // Cinterop does not hold anything required by users
-                implementation(project(":packages:cinterop"))
+                implementation(project(":cinterop"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
                 implementation("org.jetbrains.kotlinx:atomicfu:${Versions.atomicfu}")
@@ -94,7 +94,7 @@ kotlin {
         val androidMain by getting {
             dependsOn(jvm)
             dependencies {
-                api(project(":packages:cinterop"))
+                api(project(":cinterop"))
                 implementation("androidx.startup:startup-runtime:${Versions.androidxStartup}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
             }
