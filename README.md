@@ -797,7 +797,6 @@ Based on the original [Realm Kotlin SDK](https://github.com/realm/realm-kotlin) 
 
 **🔧 Technical Lead**: [Santi P. Barber](https://github.com/santipbarber)  
 **📧 Email**: santipbr@gmail.com  
-**💼 LinkedIn**: [SantipBarber](https://linkedin.com/in/santipbarber)  
-**🌐 Website**: [santipbarber.dev](https://santipbarber.dev)
+**💼 LinkedIn**: [SantipBarber](https://linkedin.com/in/santipbarber)
 
 **⚡ Powered by Modern Interop Layer Architecture - December 2024**
