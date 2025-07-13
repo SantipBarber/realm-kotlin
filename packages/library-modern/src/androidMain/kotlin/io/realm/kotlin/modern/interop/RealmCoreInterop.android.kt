@@ -1,8 +1,8 @@
 /*
- * Copyright 2024 Realm Inc. & SantipBarber
+ * Copyright 2025 Realm Inc. & SantipBarber
  * 
  * Modern Interop Layer Implementation
- * Designed and developed by SantipBarber - December 2024
+ * Designed and developed by SantipBarber - July 2025
  * 
  * This Modern Interop Layer represents a complete architectural rewrite
  * that eliminates SWIG dependencies and introduces advanced reactive programming.
@@ -24,6 +24,7 @@ package io.realm.kotlin.modern.interop
 
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.modern.platform.PlatformUtils
+import io.realm.kotlin.modern.notifications.ChangeType
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
@@ -280,6 +281,55 @@ public actual object RealmCoreInterop {
     }
     
     public actual fun removeChangeListener(listenerHandle: RealmListenerHandle) {
+        listenerHandles.remove(listenerHandle.nativePointer)
+    }
+    
+    public actual fun addResultsListener(
+        resultsHandle: RealmResultsHandle,
+        callback: (changeType: ChangeType, indices: IntArray?) -> Unit
+    ): RealmListenerHandle {
+        val listenerHandle = generateHandle()
+        val listener = AndroidRealmListener(
+            handle = listenerHandle,
+            callback = { _ -> callback(ChangeType.UPDATE, null) }
+        )
+        
+        listenerHandles[listenerHandle] = listener
+        
+        return RealmListenerHandle(listenerHandle)
+    }
+    
+    public actual fun addObjectListener(
+        objectHandle: RealmObjectHandle,
+        callback: (changeType: ChangeType, changedProperties: Array<String>?) -> Unit
+    ): RealmListenerHandle {
+        val listenerHandle = generateHandle()
+        val listener = AndroidRealmListener(
+            handle = listenerHandle,
+            callback = { _ -> callback(ChangeType.UPDATE, null) }
+        )
+        
+        listenerHandles[listenerHandle] = listener
+        
+        return RealmListenerHandle(listenerHandle)
+    }
+    
+    public actual fun addDatabaseListener(
+        databaseHandle: RealmDatabaseHandle,
+        callback: (changeType: ChangeType) -> Unit
+    ): RealmListenerHandle {
+        val listenerHandle = generateHandle()
+        val listener = AndroidRealmListener(
+            handle = listenerHandle,
+            callback = { _ -> callback(ChangeType.UPDATE) }
+        )
+        
+        listenerHandles[listenerHandle] = listener
+        
+        return RealmListenerHandle(listenerHandle)
+    }
+    
+    public actual fun removeListener(listenerHandle: RealmListenerHandle) {
         listenerHandles.remove(listenerHandle.nativePointer)
     }
     

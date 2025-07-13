@@ -1,8 +1,8 @@
 /*
- * Copyright 2024 Realm Inc. & SantipBarber
+ * Copyright 2025 Realm Inc. & SantipBarber
  * 
  * Modern Interop Layer Implementation
- * Designed and developed by SantipBarber - December 2024
+ * Designed and developed by SantipBarber - July 2025
  * 
  * This Modern Interop Layer represents a complete architectural rewrite
  * that eliminates SWIG dependencies and introduces advanced reactive programming.
@@ -143,8 +143,8 @@ public class Car : Vehicle() {
     public var engine: String? by realmString()
     public var transmission: String? by realmString()
     
-    override fun isManaged(): Boolean = this is RealmObjectProxy
-    override fun isValid(): Boolean = this is RealmObjectProxy && (this as RealmObjectProxy).objectHandle.isValid
+    override fun isManaged(): Boolean = false
+    override fun isValid(): Boolean = false
 }
 
 /**

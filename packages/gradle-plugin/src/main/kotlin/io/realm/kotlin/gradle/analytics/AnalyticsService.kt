@@ -22,6 +22,7 @@ import io.realm.kotlin.gradle.gradleVersion
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ValueSource
 import org.gradle.api.provider.ValueSourceParameters
 import org.gradle.api.services.BuildService
@@ -35,11 +36,11 @@ import java.io.File
 import java.io.UnsupportedEncodingException
 import java.net.HttpURLConnection
 import java.net.NetworkInterface
-import java.net.URL
+import java.net.URI
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.Scanner
+import java.util.*
 import javax.inject.Inject
 import javax.xml.bind.DatatypeConverter
 import kotlin.experimental.and
@@ -109,7 +110,7 @@ interface ProjectConfiguration : BuildServiceParameters {
 data class TargetInfo(
     val targetOsType: String,
     val targetCpuArch: String,
-    val targetOSVersion: String?,
+    val targetOSVersion: Provider<String>,
     val targetOSMinVersion: String?,
 )
 
@@ -151,7 +152,7 @@ abstract class AnalyticsService : BuildService<ProjectConfiguration> {
         targetInfo?.targetCpuArch?.let { properties.add("Target OS Arch", JsonPrimitive(it)) }
         targetInfo?.targetOsType?.let { properties.add("Target OS Type", JsonPrimitive(it)) }
         targetInfo?.targetOSMinVersion?.let { properties.add("Target OS Minimum Version", JsonPrimitive(it)) }
-        targetInfo?.targetOSVersion?.let { properties.add("Target OS Version", JsonPrimitive(it)) }
+        targetInfo?.targetOSVersion?.orNull?.let { properties.add("Target OS Version", JsonPrimitive(it)) }
         return GsonBuilder().create().toJson(targetSpecificJson)
     }
 
@@ -165,8 +166,8 @@ abstract class AnalyticsService : BuildService<ProjectConfiguration> {
             debug("Submitting analytics payload: $json")
             Thread {
                 try {
-                    val url = URL(URL_PREFIX + base64Encode(json))
-                    val connection = url.openConnection() as HttpURLConnection
+                    val url = URI(URL_PREFIX + base64Encode(json))
+                    val connection = url.toURL().openConnection() as HttpURLConnection
                     connection.requestMethod = "GET"
                     connection.connect()
                     debug("Analytics payload sent")
@@ -268,7 +269,6 @@ abstract class HostIdentifier : ValueSource<String, HostIdentifierParameters>, E
                 Host.WINDOWS -> windowsIdentifier
                 Host.MACOS -> macOsIdentifier
                 Host.LINUX -> linuxIdentifier
-                else -> throw IllegalStateException("Unknown host identifier")
             }
         }
     abstract val linuxIdentifier: String

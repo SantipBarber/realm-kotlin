@@ -149,11 +149,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            kotlinOptions {
-                freeCompilerArgs += when (buildType) {
+            compilerOptions {
+                freeCompilerArgs.addAll(when (buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorX86Debug
                     BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorX86Release
-                }
+                })
             }
         }
     }
@@ -164,11 +164,11 @@ kotlin {
                 packageName = "realm_wrapper"
                 includeDirs("$absoluteCorePath/src/")
             }
-            kotlinOptions {
-                freeCompilerArgs += when (buildType) {
+            compilerOptions {
+                freeCompilerArgs.addAll(when (buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesIosSimulatorArm64Debug
                     BuildType.RELEASE -> nativeLibraryIncludesIosSimulatorArm64Release
-                }
+                })
             }
         }
     }
@@ -186,11 +186,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            kotlinOptions {
-                freeCompilerArgs += when (buildType) {
+            compilerOptions {
+                freeCompilerArgs.addAll(when (buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesIosArm64Debug
                     BuildType.RELEASE -> nativeLibraryIncludesIosArm64Release
-                }
+                })
             }
         }
     }
@@ -208,11 +208,11 @@ kotlin {
             // ... and def file does not support using environment variables
             // https://github.com/JetBrains/kotlin-native/issues/3631
             // so resolving paths through gradle
-            kotlinOptions {
-                freeCompilerArgs += when(buildType) {
+            compilerOptions {
+                freeCompilerArgs.addAll(when(buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
                     BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
-                }
+                })
             }
         }
     }
@@ -223,11 +223,11 @@ kotlin {
                 packageName = "realm_wrapper"
                 includeDirs("$absoluteCorePath/src/")
             }
-            kotlinOptions {
-                freeCompilerArgs += when(buildType) {
+            compilerOptions {
+                freeCompilerArgs.addAll(when(buildType) {
                     BuildType.DEBUG -> nativeLibraryIncludesMacosUniversalDebug
                     BuildType.RELEASE -> nativeLibraryIncludesMacosUniversalRelease
-                }
+                })
             }
         }
     }

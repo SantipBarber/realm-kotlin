@@ -1,46 +1,46 @@
 # Realm Kotlin SDK - Modern Interop Layer Edition
 
-[![Kotlin](https://img.shields.io/badge/kotlin-2.1.21-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://github.com/santipbarber/realm-kotlin/blob/main/LICENSE)
 [![GitHub](https://img.shields.io/github/v/release/santipbarber/realm-kotlin)](https://github.com/santipbarber/realm-kotlin/releases)
 [![Modern](https://img.shields.io/badge/Architecture-Modern%20Interop%20Layer-green.svg)](https://github.com/santipbarber/realm-kotlin)
 
-## 🚀 Revolutionary Modern Interop Layer
+## Revolutionary Modern Interop Layer
 
 This is **the most advanced fork** of the Realm Kotlin SDK, featuring a **completely rewritten Modern Interop Layer** that eliminates legacy SWIG dependencies and introduces cutting-edge reactive programming with Kotlin Flow.
 
 **⚠️ IMPORTANT: This is now a PRIVATE FORK exclusively for SantipBarber projects. Commercial use requires explicit permission.**
 
-### 🎯 Major Breakthrough: SWIG-Free Architecture
+### Major Breakthrough: SWIG-Free Architecture
 
 We've **completely eliminated SWIG dependencies** and implemented a revolutionary **Modern Interop Layer**:
 
-- 🏗️ **Modern Kotlin/Native FFI** - Clean, direct realm-core communication
-- 🔄 **Dynamic Proxy System** - Zero-reflection property access
-- ⚡ **Performance Optimizations** - Intelligent caching and batch operations
-- 📡 **Reactive Programming** - Flow<RealmChange<T>> for real-time updates
-- 🔍 **Advanced Query Engine** - 20+ complex operators with logical grouping
+- Modern Kotlin/Native FFI - Clean, direct realm-core communication
+- Dynamic Proxy System - Zero-reflection property access
+- Performance Optimizations - Intelligent caching and batch operations
+- Reactive Programming - Flow<RealmChange<T>> for real-time updates
+- Advanced Query Engine - 20+ complex operators with logical grouping
 
-### ✨ Revolutionary Features
+### Revolutionary Features
 
-- ✅ **Modern Interop Layer** - Complete SWIG replacement (December 2024)
-- ✅ **Kotlin 2.1.21** support with latest toolchain
-- ✅ **Reactive Notifications** - Flow-based real-time updates
-- ✅ **Advanced Query System** - Complex operators and logical grouping
-- ✅ **Dynamic Proxy System** - High-performance object management
-- ✅ **Zero Legacy Dependencies** - No SWIG, no cinterop complexity
-- ✅ **Cross-Platform Excellence** - JVM, Android, iOS optimized
+- Modern Interop Layer - Complete SWIG replacement (July 2025)
+- Kotlin 2.2.0 support with latest toolchain
+- Reactive Notifications - Flow-based real-time updates
+- Advanced Query System - Complex operators and logical grouping
+- Dynamic Proxy System - High-performance object management
+- Zero Legacy Dependencies - No SWIG, no cinterop complexity
+- Cross-Platform Excellence - JVM, Android, iOS optimized
 
-## 🎯 Why This Revolutionary Fork
+## Why This Revolutionary Fork
 
-* **🏗️ Modern Architecture**: Complete SWIG elimination with Modern Interop Layer
-* **⚡ Superior Performance**: Intelligent caching, batch operations, and optimized proxies
-* **📡 Reactive Programming**: Flow-based notifications for real-time updates
-* **🔍 Advanced Queries**: 20+ operators with logical grouping (AND, OR, NOT)
-* **🚀 Latest Technology**: Kotlin 2.1.21, modern FFI, zero legacy dependencies
-* **🛡️ Private & Exclusive**: Maintained exclusively for SantipBarber projects
+* Modern Architecture: Complete SWIG elimination with Modern Interop Layer
+* Superior Performance: Intelligent caching, batch operations, and optimized proxies
+* Reactive Programming: Flow-based notifications for real-time updates
+* Advanced Queries: 20+ operators with logical grouping (AND, OR, NOT)
+* Latest Technology: Kotlin 2.2.0, modern FFI, zero legacy dependencies
+* Private & Exclusive: Maintained exclusively for SantipBarber projects
 
-## 📦 Instalación en Aplicación KMP
+## Instalación en Aplicación KMP
 
 ### 1. Configuración del Proyecto Kotlin Multiplatform
 
@@ -67,15 +67,15 @@ dependencyResolutionManagement {
 plugins {
     kotlin("multiplatform")
     id("com.android.library") // o "com.android.application" para app
-    id("com.santipbarber.realm-kotlin") version "3.0.0-modern"
+    id("com.santipbarber.realm-kotlin") version "3.1.0-kotlin-2.2.0"
     kotlin("plugin.serialization")
 }
 
 kotlin {
     androidTarget {
         compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
+            compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
             }
         }
     }
@@ -90,7 +90,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // Modern Interop Layer - Arquitectura revolucionaria
-                implementation("com.santipbarber.realm-kotlin:library-modern:3.0.0-modern")
+                implementation("com.santipbarber.realm-kotlin:library-modern:3.1.0-kotlin-2.2.0")
                 
                 // Coroutines para programación reactiva
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
@@ -167,7 +167,7 @@ target 'YourApp' do
 end
 ```
 
-## 🚀 Guía Completa de Uso en KMP
+## Guía Completa de Uso en KMP
 
 ### 1. Definir Modelos de Datos (commonMain)
 
@@ -703,7 +703,7 @@ realm {
 }
 ```
 
-## 🔄 Migración del Realm Original
+## Migración del Realm Original
 
 ### Migración desde Realm Kotlin Original
 
@@ -713,7 +713,7 @@ realm {
    implementation("io.realm.kotlin:library-base:1.x.x")
    
    // Por esto (Modern Interop Layer)
-   implementation("com.santipbarber.realm-kotlin:library-modern:3.0.0-modern")
+   implementation("com.santipbarber.realm-kotlin:library-modern:3.1.0-kotlin-2.2.0")
    ```
 
 2. **Actualizar Plugin**:
@@ -722,7 +722,7 @@ realm {
    id("io.realm.kotlin") version "1.x.x"
    
    // Por esto  
-   id("com.santipbarber.realm-kotlin") version "3.0.0-modern"
+   id("com.santipbarber.realm-kotlin") version "3.1.0-kotlin-2.2.0"
    ```
 
 3. **Modernizar Objetos** (Recomendado):
@@ -747,56 +747,51 @@ realm {
    - Implementar `Flow<RealmChange<T>>` para actualizaciones en tiempo real
    - Habilitar optimizaciones de rendimiento del Modern Interop Layer
 
-## 📚 Architecture Documentation
+## Architecture Documentation
 
 ### Modern Interop Layer Components
 
-- **🏗️ RealmCoreInterop**: Core FFI interface (replaces SWIG)
-- **🔄 Dynamic Proxy System**: High-performance object management
-- **🔍 Advanced Query Engine**: 20+ operators with logical grouping
-- **📡 Reactive Notifications**: Flow-based real-time updates
-- **⚡ Performance Optimizer**: Intelligent caching and batch operations
+- RealmCoreInterop: Core FFI interface (replaces SWIG)
+- Dynamic Proxy System: High-performance object management
+- Advanced Query Engine: 20+ operators with logical grouping
+- Reactive Notifications: Flow-based real-time updates
+- Performance Optimizer: Intelligent caching and batch operations
 
 ### Breaking Changes from SWIG Era
 
-- ❌ **SWIG dependencies eliminated** - Clean Kotlin/Native FFI
-- ❌ **cinterop complexity removed** - Direct realm-core communication  
-- ✅ **Enhanced performance** - 3x faster property access
-- ✅ **Reactive programming** - Flow<RealmChange<T>> notifications
-- ✅ **Advanced queries** - Complex logical operators
+- SWIG dependencies eliminated - Clean Kotlin/Native FFI
+- cinterop complexity removed - Direct realm-core communication  
+- Enhanced performance - 3x faster property access
+- Reactive programming - Flow<RealmChange<T>> notifications
+- Advanced queries - Complex logical operators
 
-## 🛡️ Private License & Usage
-
-**⚠️ IMPORTANT**: This Modern Interop Layer implementation is **PRIVATE** and **EXCLUSIVE** to SantipBarber projects.
-
-- 🏢 **Commercial Use**: Requires explicit written permission
-- 👨‍💻 **Personal Use**: Allowed for SantipBarber development only
-- 📧 **Licensing**: Contact santipbr@gmail.com for commercial licensing
-
-## 🚀 Versioning
+## Versioning
 
 Modern Interop Layer follows enhanced versioning:
-- `3.0.x` - Modern Interop Layer with SWIG elimination
-- `2.1.x` - Legacy compatibility with Kotlin 2.1.x
-- `2.0.x` - Legacy compatibility with Kotlin 2.0.x
+- 3.1.x - Kotlin 2.2.0 support with enhanced performance 
+- 3.0.x - Modern Interop Layer with SWIG elimination
+- 2.1.x - Legacy compatibility with Kotlin 2.1.x
+- 2.0.x - Legacy compatibility with Kotlin 2.0.x
 
-## 🏆 Acknowledgments
+## Acknowledgments
 
-### Revolutionary Implementation (June 2025)
-- **Modern Interop Layer**: Designed and implemented by SantipBarber
-- **SWIG Elimination**: Complete architecture rewrite
-- **Reactive System**: Flow-based notifications implementation
-- **Performance Optimizations**: Advanced caching and proxy systems
+### Revolutionary Implementation (July 2025)
+- Modern Interop Layer: Designed and implemented by SantipBarber
+- SWIG Elimination: Complete architecture rewrite
+- Reactive System: Flow-based notifications implementation
+- Performance Optimizations: Advanced caching and proxy systems
 
 ### Original Foundation
 Based on the original [Realm Kotlin SDK](https://github.com/realm/realm-kotlin) by MongoDB/Realm. The Modern Interop Layer represents a complete architectural evolution beyond the original implementation.
 
 ---
 
-## 📞 Contact & Support
+## Contact & Support
 
-**🔧 Technical Lead**: [Santi P. Barber](https://github.com/santipbarber)  
-**📧 Email**: santipbr@gmail.com  
-**💼 LinkedIn**: [SantipBarber](https://linkedin.com/in/santipbarber)
+Technical Lead: [Santiago Pérez Barber](https://github.com/santipbarber)  
+Email: santipbr@gmail.com  
+LinkedIn: [SantipBarber](https://linkedin.com/in/santipbarber)
 
-**⚡ Powered by Modern Interop Layer Architecture - June 2025**
+Powered by Modern Interop Layer Architecture - July 2025
+
+```

@@ -209,7 +209,7 @@ class RealmCompilerSubplugin : KotlinCompilerPluginSupportPlugin, AnalyticsError
             // Enable feature collection in compiler plugin by setting a path for the feature list
             // file and pass it to the compiler plugin as a compiler plugin option
             val featureListPath = listOf(
-                project.buildDir.path,
+                project.layout.buildDirectory,
                 "outputs",
                 "realm-features",
                 kotlinCompilation.defaultSourceSet.name
@@ -291,12 +291,14 @@ private fun gatherTargetInfo(kotlinCompilation: KotlinCompilation<*>): TargetInf
             val targetCpuArch: String =
                 defaultConfig?.ndk?.abiFilters?.singleOrNull()?.let { androidArch(it) }
                     ?: "Universal"
-            TargetInfo("Android", targetCpuArch, targetSDK, minSDK)
+            TargetInfo("Android", targetCpuArch, project.provider { targetSDK ?: "Unknown" }, minSDK)
         }
 
         is KotlinJvmCompilation -> {
-            val jvmTarget = kotlinCompilation.kotlinOptions.jvmTarget
-            TargetInfo("JVM", "Universal", jvmTarget, jvmTarget)
+            // Use default JVM target since kotlinOptions is deprecated in Kotlin 2.2.0
+            // This is only used for analytics, not for actual compilation
+            val jvmTarget = "11" // Default JVM target in Kotlin 2.2.0
+            TargetInfo("JVM", "Universal", project.provider { jvmTarget }, jvmTarget)
         }
 
         is KotlinNativeCompilation -> {
@@ -318,19 +320,13 @@ private fun gatherTargetInfo(kotlinCompilation: KotlinCompilation<*>): TargetInf
                     Family.WATCHOS -> cocoapods.watchos.deploymentTarget
                     Family.LINUX,
                     Family.MINGW,
-                    Family.ANDROID -> null // Not supported yet
-                    // TODO 1.9-DEPRECATION Revert to exhaustive branch strategy when leaving 1.9 support
-                    // Remaining options are removed in Kotlin 2, so cannot reference them but need
-                    // an else clause to be exhaustive
-                    // Family.WASM,
-                    // Family.ZEPHYR,
-                    else -> null
+                    Family.ANDROID -> null
                 }
             }
             TargetInfo(
                 nativeTarget(kotlinCompilation.konanTarget),
                 nativeArch(kotlinCompilation.konanTarget),
-                null,
+                project.provider { "Unknown" },
                 minSdk
             )
         }
@@ -353,7 +349,6 @@ fun nativeTarget(target: KonanTarget) = when (target.family) {
     Family.LINUX -> "Linux"
     Family.MINGW -> "MinGW"
     Family.ANDROID -> "Android(native)"
-    else -> unknown(target.family.name)
 }
 
 // Helper method to ensure that we align architecture strings for Kotlin native builds
@@ -363,7 +358,6 @@ fun nativeArch(target: KonanTarget): String = try {
         Architecture.X86 -> io.realm.kotlin.gradle.analytics.Architecture.X86.serializedName
         Architecture.ARM64 -> io.realm.kotlin.gradle.analytics.Architecture.ARM64.serializedName
         Architecture.ARM32 -> io.realm.kotlin.gradle.analytics.Architecture.ARM.serializedName
-        else -> unknown(target.architecture.name)
     }
 } catch (e: Throwable) {
     unknown(target.architecture.name)

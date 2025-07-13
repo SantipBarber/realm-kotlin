@@ -24,6 +24,7 @@ package io.realm.kotlin.modern.interop
 
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.modern.platform.PlatformUtils
+import io.realm.kotlin.modern.notifications.ChangeType
 import platform.Foundation.*
 import kotlin.collections.mutableMapOf
 import kotlin.collections.mutableListOf
@@ -259,6 +260,55 @@ public actual object RealmCoreInterop {
     }
     
     public actual fun removeChangeListener(listenerHandle: RealmListenerHandle) {
+        listenerHandles.remove(listenerHandle.nativePointer)
+    }
+    
+    public actual fun addResultsListener(
+        resultsHandle: RealmResultsHandle,
+        callback: (changeType: ChangeType, indices: IntArray?) -> Unit
+    ): RealmListenerHandle {
+        val listenerHandle = generateHandle()
+        val listener = IOSRealmListener(
+            handle = listenerHandle,
+            callback = { _ -> callback(ChangeType.UPDATE, null) }
+        )
+        
+        listenerHandles[listenerHandle] = listener
+        
+        return RealmListenerHandle(listenerHandle)
+    }
+    
+    public actual fun addObjectListener(
+        objectHandle: RealmObjectHandle,
+        callback: (changeType: ChangeType, changedProperties: Array<String>?) -> Unit
+    ): RealmListenerHandle {
+        val listenerHandle = generateHandle()
+        val listener = IOSRealmListener(
+            handle = listenerHandle,
+            callback = { _ -> callback(ChangeType.UPDATE, null) }
+        )
+        
+        listenerHandles[listenerHandle] = listener
+        
+        return RealmListenerHandle(listenerHandle)
+    }
+    
+    public actual fun addDatabaseListener(
+        databaseHandle: RealmDatabaseHandle,
+        callback: (changeType: ChangeType) -> Unit
+    ): RealmListenerHandle {
+        val listenerHandle = generateHandle()
+        val listener = IOSRealmListener(
+            handle = listenerHandle,
+            callback = { _ -> callback(ChangeType.UPDATE) }
+        )
+        
+        listenerHandles[listenerHandle] = listener
+        
+        return RealmListenerHandle(listenerHandle)
+    }
+    
+    public actual fun removeListener(listenerHandle: RealmListenerHandle) {
         listenerHandles.remove(listenerHandle.nativePointer)
     }
     
