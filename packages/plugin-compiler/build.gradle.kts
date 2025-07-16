@@ -21,6 +21,11 @@ plugins {
     id("realm-publisher")
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 val mavenPublicationName = "compilerPlugin"
 
 dependencies {
@@ -41,9 +46,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}")
     testImplementation("dev.zacsweers.kctfork:core:${Versions.kotlinCompileTesting}")
     // Have to be mentioned explicitly as it is not an api dependency of library
-    implementation(project(":packages:cinterop"))
-    testImplementation(project(":packages:library-base"))
-    testImplementation(project(":packages:library-sync"))
+    // Temporarily disabled while cinterop is not available
+    // implementation(project(":packages:cinterop"))
+    // testImplementation(project(":packages:library-base"))
+    // testImplementation(project(":packages:library-sync"))
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

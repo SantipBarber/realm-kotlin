@@ -35,12 +35,11 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.concurrent.locks.ReentrantLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
-import java.util.concurrent.locks.Condition
+import java.nio.file.StandardOpenOption
 import java.nio.channels.FileChannel
 import java.nio.channels.FileLock
-import java.nio.file.StandardOpenOption
+import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 public actual object PlatformUtils {
     
@@ -340,7 +339,7 @@ private class AndroidRealmFileLock(
     private val lock: FileLock
 ) : RealmFileLock {
     
-    public override fun release(): Boolean {
+    override fun release(): Boolean {
         return try {
             lock.release()
             channel.close()
@@ -350,7 +349,7 @@ private class AndroidRealmFileLock(
         }
     }
     
-    public override fun isValid(): Boolean = lock.isValid
+    override fun isValid(): Boolean = lock.isValid
 }
 
 public actual object RealmThreading {
@@ -376,66 +375,66 @@ private class AndroidRealmWorkerThread(private val name: String) : RealmWorkerTh
     private val handlerThread = HandlerThread(name)
     private lateinit var handler: Handler
     
-    public override fun start() {
+    override fun start() {
         handlerThread.start()
         handler = Handler(handlerThread.looper)
     }
     
-    public override fun stop() {
+    override fun stop() {
         handlerThread.quitSafely()
     }
     
-    public override fun post(action: () -> Unit) {
+    override fun post(action: () -> Unit) {
         handler.post(action)
     }
     
-    public override fun postDelayed(delayMillis: Long, action: () -> Unit) {
+    override fun postDelayed(delayMillis: Long, action: () -> Unit) {
         handler.postDelayed(action, delayMillis)
     }
     
-    public override val isAlive: Boolean
+    override val isAlive: Boolean
         get() = handlerThread.isAlive
 }
 
 private class AndroidRealmMutex : RealmMutex {
     private val mutex = ReentrantLock()
     
-    public override fun lock() = mutex.lock()
-    public override fun unlock() = mutex.unlock()
-    public override fun tryLock(): Boolean = mutex.tryLock()
+    override fun lock() = mutex.lock()
+    override fun unlock() = mutex.unlock()
+    override fun tryLock(): Boolean = mutex.tryLock()
 }
 
 private class AndroidRealmCondition : RealmCondition {
     private val lock = ReentrantLock()
     private val condition = lock.newCondition()
     
-    public override fun wait(mutex: RealmMutex) {
+    override fun wait(mutex: RealmMutex) {
         condition.await()
     }
     
-    public override fun wait(mutex: RealmMutex, timeoutMillis: Long): Boolean {
+    override fun wait(mutex: RealmMutex, timeoutMillis: Long): Boolean {
         return condition.await(timeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS)
     }
     
-    public override fun signal() = condition.signal()
-    public override fun signalAll() = condition.signalAll()
+    override fun signal() = condition.signal()
+    override fun signalAll() = condition.signalAll()
 }
 
 private class AndroidRealmReadWriteLock : RealmReadWriteLock {
     private val rwLock = ReentrantReadWriteLock()
     
-    public override fun readLock(): RealmMutex = AndroidReadLockWrapper(rwLock.readLock())
-    public override fun writeLock(): RealmMutex = AndroidWriteLockWrapper(rwLock.writeLock())
+    override fun readLock(): RealmMutex = AndroidReadLockWrapper(rwLock.readLock())
+    override fun writeLock(): RealmMutex = AndroidWriteLockWrapper(rwLock.writeLock())
 }
 
 private class AndroidReadLockWrapper(private val readLock: java.util.concurrent.locks.Lock) : RealmMutex {
-    public override fun lock() = readLock.lock()
-    public override fun unlock() = readLock.unlock()
-    public override fun tryLock(): Boolean = readLock.tryLock()
+    override fun lock() = readLock.lock()
+    override fun unlock() = readLock.unlock()
+    override fun tryLock(): Boolean = readLock.tryLock()
 }
 
 private class AndroidWriteLockWrapper(private val writeLock: java.util.concurrent.locks.Lock) : RealmMutex {
-    public override fun lock() = writeLock.lock()
-    public override fun unlock() = writeLock.unlock()
-    public override fun tryLock(): Boolean = writeLock.tryLock()
+    override fun lock() = writeLock.lock()
+    override fun unlock() = writeLock.unlock()
+    override fun tryLock(): Boolean = writeLock.tryLock()
 }

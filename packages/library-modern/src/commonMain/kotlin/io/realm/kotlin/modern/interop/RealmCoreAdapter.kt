@@ -293,33 +293,26 @@ internal class HandleRegistry {
 internal object HandleFactory {
     
     fun createDatabaseHandle(nativePointer: Long, path: String): RealmDatabaseHandle {
-        // For now, we use the platform-specific implementations
-        // In the future, this could be enhanced to create our own wrapper types
-        // that integrate more deeply with the adapter
-        return when {
-            // This is a temporary approach - in a real implementation,
-            // we'd have our own handle types that integrate with the adapter
-            else -> throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
-        }
+        throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
     }
     
     fun createTransactionHandle(nativePointer: Long, databaseHandle: RealmDatabaseHandle): RealmTransactionHandle {
-        return throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
+        throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
     }
     
     fun createObjectHandle(nativePointer: Long, className: String): RealmObjectHandle {
-        return throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
+        throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
     }
     
     fun createQueryHandle(nativePointer: Long, className: String): RealmQueryHandle {
-        return throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
+        throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
     }
     
     fun createResultsHandle(nativePointer: Long, size: Long): RealmResultsHandle {
-        return throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
+        throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
     }
     
     fun createListenerHandle(nativePointer: Long): RealmListenerHandle {
-        return throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
+        throw RealmInteropException("Platform-specific handle creation not yet supported in adapter mode")
     }
 }

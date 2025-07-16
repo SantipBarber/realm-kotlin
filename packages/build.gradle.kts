@@ -193,7 +193,7 @@ tasks.register("uploadDokka") {
         // Upload two copies, to 'latest' and a versioned folder for posterity.
         // Symlinks would have been safer and faster, but this is not supported by S3.
         listOf(Realm.version, "latest").forEach { version: String ->
-            exec {
+            providers.exec {
                 commandLine = listOf(
                     "s3cmd",
                     "put",

@@ -108,7 +108,7 @@ tasks {
     register<GradleBuild>("mavenCentralUpload") {
         description = "Push all Realm artifacts to Maven Central"
         group = "Publishing"
-        buildFile = file("${rootDir}/packages/build.gradle.kts")
+        layout.buildDirectory = file("${rootDir}/packages/build.gradle.kts")
         tasks = listOf("publishToSonatype")
         copyProperties(this)
     }
@@ -143,7 +143,7 @@ tasks {
     val uploadDebugSymbols by register("uploadDebugSymbols", Task::class) {
         dependsOn.addAll(listOf(archiveDebugSymbols, verifyS3Access))
         doLast {
-            exec {
+            providers.exec {
                 val s3AccessKey = getPropertyValue("REALM_S3_ACCESS_KEY")
                 val s3SecretKey = getPropertyValue("REALM_S3_SECRET_KEY")
                 workingDir = File("${layout.buildDirectory.get()}/outputs/s3/")
@@ -163,7 +163,9 @@ tasks {
         dependsOn.add(verifyS3Access)
         val s3AccessKey = getPropertyValue("REALM_S3_ACCESS_KEY")
         val s3SecretKey = getPropertyValue("REALM_S3_SECRET_KEY")
-        File("${layout.buildDirectory.get()}/outputs/s3", "version.txt").writeText(currentVersion)
+        doFirst {
+            File("${layout.buildDirectory.get()}/outputs/s3", "version.txt").writeText(currentVersion)
+        }
         commandLine = listOf(
                 "s3cmd",
                 "--access_key=${s3AccessKey}",

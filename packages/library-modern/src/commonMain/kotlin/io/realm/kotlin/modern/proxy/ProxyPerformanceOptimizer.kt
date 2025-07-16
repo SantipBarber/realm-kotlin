@@ -97,17 +97,18 @@ public object ProxyPerformanceOptimizer {
         
         // Create new optimized proxy
         val metadata = getClassMetadata(clazz)
-        val proxy = createConcreteOptimizedProxy(clazz, objectHandle, metadata)
+        val newProxy = createConcreteOptimizedProxy(clazz, objectHandle, metadata)
         
         // Cache the proxy with weak reference
-        proxyInstanceCache[handleId] = WeakReference(proxy)
+        proxyInstanceCache[handleId] = WeakReference(newProxy)
         
-        return proxy
+        return newProxy
     }
     
     /**
      * Creates an optimized concrete proxy with pre-cached property information.
      */
+    @Suppress("UNCHECKED_CAST")
     private fun <T : BaseRealmObject> createConcreteOptimizedProxy(
         clazz: KClass<T>,
         objectHandle: RealmObjectHandle,

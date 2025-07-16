@@ -62,7 +62,7 @@ val HOST_OS: OperatingSystem = findHostOs()
 
 object Realm {
     val ciBuild = (System.getenv("CI") != null)
-    const val version = "3.1.0-kotlin-2.2.0"
+    const val version = "k2.2.0-STABLE"
     const val group = "com.santipbarber.realm-kotlin"
     const val projectUrl = "https://github.com/santipbarber/realm-kotlin"
     const val pluginPortalId = "com.santipbarber.realm-kotlin"

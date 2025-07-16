@@ -101,12 +101,15 @@ class RealmPublishPlugin : Plugin<Project> {
     private fun configureGitHubPackagesRepository(project: Project) {
         project.extensions.getByType<PublishingExtension>().apply {
             repositories {
-                maven {
-                    name = "GitHubPackages"
-                    url = project.uri("https://maven.pkg.github.com/santipbarber/realm-kotlin")
-                    credentials {
-                        username = System.getenv("GITHUB_ACTOR")
-                        password = System.getenv("GITHUB_TOKEN")
+                // Prevent duplicate repository registration
+                if (findByName("GitHubPackages") == null) {
+                    maven {
+                        name = "GitHubPackages"
+                        url = project.uri("https://maven.pkg.github.com/santipbarber/realm-kotlin")
+                        credentials {
+                            username = System.getenv("GITHUB_ACTOR")
+                            password = System.getenv("GITHUB_TOKEN")
+                        }
                     }
                 }
             }

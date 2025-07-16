@@ -212,9 +212,9 @@ public actual object RealmFileSystem {
     
     public actual fun cleanupTempFiles(directory: String) {
         val fileManager = NSFileManager.defaultManager
-        val contents = fileManager.contentsOfDirectoryAtPath(directory, error = null) as? List<String>
+        val contents = fileManager.contentsOfDirectoryAtPath(directory, error = null)
         
-        contents?.filter { it.startsWith("realm_temp_") }?.forEach { filename ->
+        contents?.mapNotNull { it as? String }?.filter { it.startsWith("realm_temp_") }?.forEach { filename ->
             val fullPath = PlatformUtils.joinPath(directory, filename)
             fileManager.removeItemAtPath(fullPath, error = null)
         }
